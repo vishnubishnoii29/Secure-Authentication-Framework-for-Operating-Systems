@@ -1,0 +1,45 @@
+2026-04-13 11:11:43 | INFO | event=app_started | utc=2026-04-13T05:41:43Z | detail=framework_boot
+2026-04-13 11:12:54 | INFO | event=app_started | utc=2026-04-13T05:42:54Z | detail=framework_boot
+2026-04-13 11:12:54 | INFO | event=app_shutdown | utc=2026-04-13T05:42:54Z | detail=window_closed
+2026-04-13 11:13:21 | INFO | event=app_started | utc=2026-04-13T05:43:21Z | detail=framework_boot
+2026-04-13 11:13:47 | INFO | event=login_failed | utc=2026-04-13T05:43:47Z | user=VishnuBishnoi | detail=invalid_credentials
+2026-04-13 11:16:42 | INFO | event=registration_failed | utc=2026-04-13T05:46:42Z | user=VishnuBishnoi | detail=Password must be at least 8 characters.
+2026-04-13 11:16:43 | INFO | event=registration_failed | utc=2026-04-13T05:46:43Z | user=VishnuBishnoi | detail=Password must be at least 8 characters.
+2026-04-13 11:17:05 | INFO | event=registration_success | utc=2026-04-13T05:47:05Z | user=VishnuBishnoi
+2026-04-13 11:17:19 | INFO | event=otp_issued | utc=2026-04-13T05:47:19Z | user=VishnuBishnoi | detail=mfa_challenge_created
+2026-04-13 11:17:36 | INFO | event=login_success | utc=2026-04-13T05:47:36Z | user=VishnuBishnoi | detail=otp_verified
+2026-04-13 11:21:29 | INFO | event=app_shutdown | utc=2026-04-13T05:51:29Z | detail=window_closed
+2026-04-13 11:21:29 | INFO | event=logout | utc=2026-04-13T05:51:29Z | user=VishnuBishnoi
+2026-04-13 11:46:03 | INFO | event=app_started | utc=2026-04-13T06:16:03Z | detail=framework_boot
+2026-04-13 11:46:24 | INFO | event=otp_issued | utc=2026-04-13T06:16:24Z | user=VishnuBishnoi | detail=mfa_challenge_created
+2026-04-13 11:46:38 | INFO | event=login_success | utc=2026-04-13T06:16:38Z | user=VishnuBishnoi | detail=otp_verified
+2026-04-13 11:47:05 | INFO | event=app_shutdown | utc=2026-04-13T06:17:05Z | detail=window_closed
+2026-04-13 11:47:05 | INFO | event=logout | utc=2026-04-13T06:17:05Z | user=VishnuBishnoi
+2026-04-13 11:48:13 | INFO | event=app_started | utc=2026-04-13T06:18:13Z | detail=framework_boot
+2026-04-13 11:48:21 | INFO | event=app_shutdown | utc=2026-04-13T06:18:21Z | detail=window_closed
+2026-04-13 13:35:34 | INFO | event=app_started | utc=2026-04-13T08:05:34Z | detail=framework_boot
+2026-04-13 13:36:03 | INFO | event=otp_issued | utc=2026-04-13T08:06:03Z | user=VishnuBishnoi | detail=mfa_challenge_created
+2026-04-13 13:36:12 | INFO | event=login_success | utc=2026-04-13T08:06:12Z | user=VishnuBishnoi | detail=otp_verified
+2026-04-13 13:36:21 | INFO | event=logout | utc=2026-04-13T08:06:21Z | user=VishnuBishnoi
+2026-04-13 13:39:38 | INFO | event=app_shutdown | utc=2026-04-13T08:09:38Z | detail=window_closed
+2026-04-13 13:45:05 | INFO | event=app_started | utc=2026-04-13T08:15:05Z | detail=framework_boot
+2026-04-13 13:45:23 | INFO | event=app_started | utc=2026-04-13T08:15:23Z | detail=framework_boot
+2026-04-13 13:45:41 | INFO | event=otp_issued | utc=2026-04-13T08:15:41Z | user=VishnuBishnoi | detail=mfa_challenge_created
+2026-04-13 13:45:46 | INFO | event=login_success | utc=2026-04-13T08:15:46Z | user=VishnuBishnoi | detail=otp_verified
+2026-04-13 13:47:49 | INFO | event=app_started | utc=2026-04-13T08:17:49Z | detail=framework_boot
+2026-04-13 13:48:07 | INFO | event=otp_issued | utc=2026-04-13T08:18:07Z | user=VishnuBishnoi | detail=mfa_challenge_created
+2026-04-13 13:48:14 | INFO | event=login_success | utc=2026-04-13T08:18:14Z | user=VishnuBishnoi | detail=otp_verified
+2026-04-13 13:49:30 | INFO | event=app_shutdown | utc=2026-04-13T08:19:30Z | detail=window_closed
+2026-04-13 13:49:30 | INFO | event=logout | utc=2026-04-13T08:19:30Z | user=VishnuBishnoi
+2026-04-13 13:49:35 | INFO | event=app_shutdown | utc=2026-04-13T08:19:35Z | detail=window_closed
+2026-04-13 13:49:35 | INFO | event=logout | utc=2026-04-13T08:19:35Z | user=VishnuBishnoi
+2026-04-13 13:51:24 | INFO | event=app_started | utc=2026-04-13T08:21:24Z | detail=framework_boot
+2026-04-13 13:51:37 | INFO | event=otp_issued | utc=2026-04-13T08:21:37Z | user=VishnuBishnoi | detail=mfa_challenge_created
+2026-04-13 13:51:45 | INFO | event=login_success | utc=2026-04-13T08:21:45Z | user=VishnuBishnoi | detail=otp_verified
+2026-04-13 13:52:32 | INFO | event=app_shutdown | utc=2026-04-13T08:22:32Z | detail=window_closed
+2026-04-13 13:52:32 | INFO | event=logout | utc=2026-04-13T08:22:32Z | user=VishnuBishnoi
+2026-04-13 13:52:51 | INFO | event=app_started | utc=2026-04-13T08:22:51Z | detail=framework_boot
+2026-04-13 13:53:06 | INFO | event=otp_issued | utc=2026-04-13T08:23:06Z | user=VishnuBishnoi | detail=mfa_challenge_created
+2026-04-13 13:53:33 | INFO | event=login_success | utc=2026-04-13T08:23:33Z | user=VishnuBishnoi | detail=otp_verified
+2026-04-13 13:53:41 | INFO | event=logout | utc=2026-04-13T08:23:41Z | user=VishnuBishnoi
+2026-04-13 13:53:50 | INFO | event=app_shutdown | utc=2026-04-13T08:23:50Z | detail=window_closed
