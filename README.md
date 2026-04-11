@@ -1,3 +1,4 @@
+
 # Secure Authentication Framework for Operating Systems
 
 A desktop demo of a layered authentication stack: **bcrypt** password hashing, **SQLite** persistence, **OTP-based MFA** (simulated delivery), optional **Fernet** encryption for an in-memory session token, structured **logging**, and a **Tkinter** UI with clear navigation between login, registration, OTP, and dashboard screens.
@@ -64,3 +65,7 @@ python main.py
 ## License
 
 Educational use — adapt as needed for coursework.
+=======
+# Secure-Authentication-Framework-for-Operating-Systems
+This project presents a robust and scalable authentication framework designed to enhance the security of operating systems by ensuring that only authorized users gain access to system resources. The framework integrates modern authentication techniques, including secure password handling, multi-factor authentication (MFA).
+(no <<<<< >>>>>)
