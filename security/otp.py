@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 
-@dataclass
+@dataclass(slots=True)
 class OTPChallenge:
     code: str
     expires_at: float

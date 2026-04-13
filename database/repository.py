@@ -10,7 +10,7 @@ from typing import Optional
 from database.connection import get_connection
 
 
-@dataclass
+@dataclass(slots=True)
 class UserRecord:
     id: int
     username: str

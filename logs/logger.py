@@ -38,6 +38,7 @@ def get_logger(name: str = "auth_framework") -> logging.Logger:
     ch.setFormatter(fmt)
     logger.addHandler(fh)
     logger.addHandler(ch)
+    logger.propagate = False
     _configured = True
     return logger
 

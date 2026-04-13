@@ -18,7 +18,7 @@ class AuthError(Exception):
     """User-facing authentication failures."""
 
 
-@dataclass
+@dataclass(slots=True)
 class SessionState:
     user_id: int
     username: str
