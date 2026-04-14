@@ -44,6 +44,8 @@ class DeadlockDetector:
         Detect deadlock using Banker's Algorithm.
         Returns safe sequence if exists, otherwise indicates deadlock.
         """
+        if state.num_processes <= 0 or state.num_resources <= 0:
+            raise ValueError("Deadlock detection requires at least one process and one resource.")
         need = DeadlockDetector._build_need_matrix(state)
         work = list(state.available)
         finish = [False] * state.num_processes
@@ -91,6 +93,8 @@ class DeadlockDetector:
         If process i is waiting for resource held by process j, add edge i -> j.
         Deadlock exists if there's a cycle.
         """
+        if state.num_processes <= 0 or state.num_resources <= 0:
+            raise ValueError("Deadlock detection requires at least one process and one resource.")
         wait_for: list[list[int]] = [[] for _ in range(state.num_processes)]
 
         for i in range(state.num_processes):
