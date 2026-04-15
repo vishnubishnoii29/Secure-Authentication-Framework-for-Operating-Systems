@@ -6,6 +6,7 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 from typing import Callable
 
+from logs.logger import log_event
 from os_algorithms.deadlock_detection import DeadlockDetector, ResourceAllocationState
 from ui.styles import Theme
 
@@ -291,4 +292,8 @@ class DeadlockDetectionView(ttk.Frame):
         except ValueError as e:
             messagebox.showerror("Invalid Input", f"Please enter valid numbers: {str(e)}")
         except Exception as e:
-            messagebox.showerror("Analysis Error", f"An error occurred: {str(e)}")
+            log_event("deadlock_analysis_error", detail=str(e))
+            messagebox.showerror(
+                "Analysis Error",
+                "An internal error occurred during deadlock analysis. Check logs for details.",
+            )

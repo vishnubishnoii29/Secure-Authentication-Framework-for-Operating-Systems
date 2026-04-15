@@ -6,6 +6,7 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 from typing import Callable
 
+from logs.logger import log_event
 from os_algorithms.cpu_scheduling import CPUScheduler, Process
 from ui.styles import Theme
 
@@ -285,5 +286,11 @@ class CPUSchedulingView(ttk.Frame):
 
             self.results_text.insert(tk.END, output)
             self.results_text.config(state=tk.DISABLED)
+        except ValueError as e:
+            messagebox.showerror("Calculation Error", str(e))
         except Exception as e:
-            messagebox.showerror("Calculation Error", f"An error occurred: {str(e)}")
+            log_event("cpu_scheduling_error", detail=str(e))
+            messagebox.showerror(
+                "Calculation Error",
+                "An internal error occurred while calculating scheduling results. Check logs for details.",
+            )

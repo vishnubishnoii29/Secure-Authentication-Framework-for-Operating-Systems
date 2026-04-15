@@ -43,3 +43,5 @@
 2026-04-13 13:53:33 | INFO | event=login_success | utc=2026-04-13T08:23:33Z | user=VishnuBishnoi | detail=otp_verified
 2026-04-13 13:53:41 | INFO | event=logout | utc=2026-04-13T08:23:41Z | user=VishnuBishnoi
 2026-04-13 13:53:50 | INFO | event=app_shutdown | utc=2026-04-13T08:23:50Z | detail=window_closed
+2026-04-15 21:32:40 | INFO | event=app_started | utc=2026-04-15T16:02:40Z | detail=framework_boot
+2026-04-15 21:32:43 | INFO | event=app_shutdown | utc=2026-04-15T16:02:43Z | detail=window_closed
