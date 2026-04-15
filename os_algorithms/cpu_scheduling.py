@@ -42,6 +42,8 @@ class CPUScheduler:
         waiting_times: dict[int, int],
         turnaround_times: dict[int, int],
     ) -> SchedulingResult:
+        if not waiting_times or not turnaround_times:
+            raise ValueError("Scheduling requires at least one process.")
         avg_waiting = sum(waiting_times.values()) / len(waiting_times)
         avg_turnaround = sum(turnaround_times.values()) / len(turnaround_times)
         return SchedulingResult(
@@ -56,6 +58,8 @@ class CPUScheduler:
     @staticmethod
     def fcfs(processes: List[Process]) -> SchedulingResult:
         """First Come First Serve scheduling."""
+        if not processes:
+            raise ValueError("At least one process is required for FCFS scheduling.")
         sorted_processes = sorted(processes, key=lambda p: p.arrival_time)
         gantt_chart: list[tuple[str, int, int]] = []
         waiting_times: dict[int, int] = {}
@@ -80,6 +84,8 @@ class CPUScheduler:
     @staticmethod
     def sjf(processes: List[Process]) -> SchedulingResult:
         """Shortest Job First scheduling (non-preemptive)."""
+        if not processes:
+            raise ValueError("At least one process is required for SJF scheduling.")
         remaining = sorted(processes, key=lambda p: p.arrival_time)
         gantt_chart: list[tuple[str, int, int]] = []
         waiting_times: dict[int, int] = {}
@@ -111,6 +117,10 @@ class CPUScheduler:
     @staticmethod
     def round_robin(processes: List[Process], time_quantum: int) -> SchedulingResult:
         """Round Robin scheduling with time quantum."""
+        if not processes:
+            raise ValueError("At least one process is required for Round Robin scheduling.")
+        if time_quantum <= 0:
+            raise ValueError("Time quantum must be a positive integer.")
         sorted_processes = sorted(processes, key=lambda p: p.arrival_time)
         gantt_chart: list[tuple[str, int, int]] = []
         waiting_times = {p.pid: 0 for p in sorted_processes}
@@ -159,6 +169,8 @@ class CPUScheduler:
     @staticmethod
     def priority_scheduling(processes: List[Process]) -> SchedulingResult:
         """Priority Scheduling (non-preemptive, lower priority number = higher priority)."""
+        if not processes:
+            raise ValueError("At least one process is required for Priority scheduling.")
         remaining = sorted(processes, key=lambda p: p.arrival_time)
         gantt_chart: list[tuple[str, int, int]] = []
         waiting_times: dict[int, int] = {}
