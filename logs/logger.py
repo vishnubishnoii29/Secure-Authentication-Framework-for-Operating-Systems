@@ -21,7 +21,8 @@ def _ensure_log_dir() -> None:
 def get_logger(name: str = "auth_framework") -> logging.Logger:
     global _configured
     logger = logging.getLogger(name)
-    if _configured:
+    if _configured or logger.handlers:
+        _configured = True
         return logger
     _ensure_log_dir()
     logger.setLevel(logging.DEBUG)
