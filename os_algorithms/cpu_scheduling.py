@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from typing import List
 
 
-@dataclass
+@dataclass(slots=True)
 class Process:
     """Represents a process with arrival time, burst time, and priority."""
 
@@ -20,7 +20,7 @@ class Process:
         return f"P{self.pid}"
 
 
-@dataclass
+@dataclass(slots=True)
 class SchedulingResult:
     """Stores scheduling algorithm result."""
 

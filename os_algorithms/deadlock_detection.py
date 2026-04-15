@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from typing import List, Set
 
 
-@dataclass
+@dataclass(slots=True)
 class ResourceAllocationState:
     """Represents the current state of resource allocation."""
 
@@ -17,7 +17,7 @@ class ResourceAllocationState:
     available: List[int]  # available[j] = available resources of type j
 
 
-@dataclass
+@dataclass(slots=True)
 class DeadlockDetectionResult:
     """Result of deadlock detection analysis."""
 
