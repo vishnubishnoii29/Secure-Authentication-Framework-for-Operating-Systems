@@ -1,0 +1,90 @@
+.App {
+  text-align: center;
+  background-color: #0d1117;
+  color: #c9d1d9;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.App-header {
+  background-color: #161b22;
+  padding: 20px;
+  border-bottom: 1px solid #30363d;
+}
+
+.App-header h1 {
+  color: #58a6ff;
+  margin: 0;
+  font-size: 2.5rem;
+}
+
+.App-header p {
+  color: #8b949e;
+  margin: 10px 0 0 0;
+}
+
+.auth-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.auth-container h2 {
+  color: #58a6ff;
+  margin-bottom: 30px;
+  font-size: 1.8rem;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #c9d1d9;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  background-color: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  color: #c9d1d9;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #58a6ff;
+  box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.1);
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background-color: #238636;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button[type="submit"]:hover {
+  background-color: #2ea043;
+}
+
+main {
+  padding: 20px;
+}
