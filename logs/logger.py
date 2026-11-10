@@ -43,6 +43,11 @@ def get_logger(name: str = "auth_framework") -> logging.Logger:
     return logger
 
 
+def _one_line(value: Any) -> str:
+    """Keep a logged value on one line so input cannot forge extra log entries."""
+    return str(value).replace("\r", "\\r").replace("\n", "\\n")
+
+
 def log_event(
     event: str,
     *,
@@ -55,10 +60,10 @@ def log_event(
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     parts = [f"event={event}", f"utc={ts}"]
     if username:
-        parts.append(f"user={username}")
+        parts.append(f"user={_one_line(username)}")
     if detail:
-        parts.append(f"detail={detail}")
+        parts.append(f"detail={_one_line(detail)}")
     if extra:
         for k, v in extra.items():
-            parts.append(f"{k}={v}")
+            parts.append(f"{k}={_one_line(v)}")
     log.info(" | ".join(parts))
