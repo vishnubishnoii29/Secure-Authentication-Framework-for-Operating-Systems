@@ -1,137 +1,81 @@
-# Enhanced OS Authentication Framework with OS Tools
+# Features and OS Tools
 
-## Overview
-The Secure Authentication Framework has been significantly enhanced with interactive Operating System tools and an improved UI design.
+Notes on what the application does, with a closer look at the two Operating System simulators. For setup, tests and security notes see `README.md`.
 
-## ✨ New Features
+## Authentication
 
-### 1. **CPU Scheduling Simulator**
-- **Location**: Dashboard → "Open CPU Scheduler"
-- **Algorithms Supported**:
-  - **FCFS** (First Come First Serve)
-  - **SJF** (Shortest Job First) 
-  - **Round Robin** (with configurable time quantum)
-  - **Priority Scheduling** (lower number = higher priority)
+- Registration with username and password rules (`utils/validation.py`)
+- Password hashing with `bcrypt` (72-byte limit)
+- Login with a simulated OTP; the code is shown on screen for demonstration
+- Lockout: 5 wrong passwords lock the username for 60 seconds; an OTP is dropped after 3 wrong codes or 120 seconds (`auth/throttle.py`). State is in memory, so a restart clears it
+- Session token encrypted in memory with `cryptography` (a teaching example)
+- SQLite account storage and an audit log with timestamps
 
+## CPU Scheduling Simulator
+
+- **Location**: Dashboard, "Open CPU Scheduler"
+- **Algorithms**:
+  - **FCFS** (First Come First Served), non-preemptive
+  - **SJF** (Shortest Job First), non-preemptive
+  - **Priority** (a lower number means a higher priority), non-preemptive
+  - **Round Robin** with a configurable time quantum, preemptive
 - **Features**:
-  - Add processes with arrival time, burst time, and priority
-  - Interactive process management (add/remove/clear)
-  - View Gantt charts showing process execution timeline
-  - Calculate waiting times and turnaround times
-  - Display average statistics for comparison
+  - Add, remove and clear processes with arrival time, burst time and priority
+  - Gantt chart of the execution timeline
+  - Waiting time and turnaround time per process, with averages for comparison
 
-### 2. **Deadlock Detection Simulator**
-- **Location**: Dashboard → "Open Deadlock Detector"
-- **Detection Methods**:
-  - **Banker's Algorithm**: Ensures system safety by finding safe sequences
-  - **Wait-for Graph**: Detects cycles in resource dependencies
+## Deadlock Simulator
 
+- **Location**: Dashboard, "Open Deadlock Detector"
+- **Methods**:
+  - **Banker's algorithm**: reports a safe state with a safe sequence, or an unsafe state with the processes that cannot be guaranteed to finish. An unsafe state is a risk of deadlock, not yet a deadlock
+  - **Wait-for graph**: an edge from a process to every holder of a resource it still needs and cannot get now. A cycle is a deadlock when each resource has one instance; with several instances, confirm it with Banker's algorithm
 - **Features**:
-  - Configure system with custom number of processes and resources
-  - Input allocated resources and maximum demands
-  - Specify available resources
-  - Automatic deadlock analysis
-  - View need matrix and safe sequences
-  - Clear indication of deadlocked processes (if any)
+  - Set the number of processes and resources
+  - Enter allocation, maximum demand and available resources
+  - Input checks: no negative values, and allocation cannot exceed maximum demand
+  - Need matrix (maximum minus allocation), safe sequence and the list of deadlocked processes
 
-## 🎨 UI/UX Improvements
+## Project structure
 
-### Enhanced Dashboard
-- **Scrollable layout** for better content organization
-- **Multiple feature cards** with descriptive information
-- **Improved visual hierarchy** with better spacing and typography
-- **Interactive buttons** with hover effects
-- **Better color scheme** with improved contrast and readability
-
-### Styling Enhancements
-- Added new color variables for better state management
-- Implemented hover states for interactive elements
-- Created additional button styles (Success, Primary, Secondary)
-- Enhanced entry field styling with focus states
-- Improved scrollbar appearance
-- Better visual feedback for user interactions
-
-### New Interactive Elements
-- Radio buttons for algorithm selection
-- Spinboxes for numeric input
-- Matrix input interfaces
-- Real-time results display in text areas
-- Back navigation buttons for easy flow
-
-## 📁 Project Structure
-
-```
+```text
+main.py                       entry point
+auth/                         registration, login, OTP hand-off, session, lockout
+security/                     bcrypt hashing, OTP, Fernet encryption
+database/                     SQLite connection, schema, user repository
+logs/                         file and console logging
+utils/                        username and password rules
 os_algorithms/
-├── __init__.py
-├── cpu_scheduling.py     (CPU scheduling algorithms)
-└── deadlock_detection.py (Deadlock detection logic)
-
+  cpu_scheduling.py           FCFS, SJF, Round Robin, Priority
+  deadlock_detection.py       Banker's algorithm, wait-for graph
 ui/
-├── app.py                (Main application with new routes)
-├── dashboard_view.py     (Enhanced dashboard with feature cards)
-├── cpu_scheduling_view.py (CPU Scheduling Simulator UI)
-├── deadlock_detection_view.py (Deadlock Detection Simulator UI)
-├── styles.py             (Enhanced theme and styling)
-└── [other existing views]
+  app.py                      main window and screen routing
+  login_view.py, register_view.py, otp_view.py
+  dashboard_view.py           feature cards for the two simulators
+  cpu_scheduling_view.py      CPU Scheduling Simulator screen
+  deadlock_detection_view.py  Deadlock Simulator screen
+  styles.py                   dark theme and widget styles
+tests/                        unit tests (standard library only)
+client/                       unfinished React mock-up, not connected to the app
 ```
 
-## 🚀 How to Use
-
-### 1. **CPU Scheduling**
-   1. Login to your secure account
-   2. Click "Open CPU Scheduler" from the dashboard
-   3. Add processes with arrival time, burst time, and priority
-   4. Select an algorithm (FCFS, SJF, Round Robin, Priority)
-   5. If using Round Robin, set the time quantum
-   6. Click "Calculate & View Results"
-   7. View Gantt chart, waiting times, and turnaround times comparison
-
-### 2. **Deadlock Detection**
-   1. Login to your secure account
-   2. Click "Open Deadlock Detector" from the dashboard
-   3. Setup system with number of processes and resources
-   4. Enter allocated resources for each process
-   5. Enter maximum demand for each process
-   6. Enter available resources
-   7. Choose detection method (Banker's or Wait-for Graph)
-   8. Click "Analyze for Deadlock"
-   9. View analysis results and safe sequences
-
-## 🔧 Technical Details
+## Using the simulators
 
 ### CPU Scheduling
-- Non-preemptive algorithms with accurate timing
-- Automatic time calculations
-- Support for multiple priority levels
-- Comprehensive statistical analysis
+
+1. Sign in, then open "Open CPU Scheduler" on the dashboard
+2. Add processes with arrival time, burst time and priority
+3. Choose an algorithm; for Round Robin also set the time quantum
+4. Click "Calculate & View Results" to see the Gantt chart, waiting times and turnaround times
 
 ### Deadlock Detection
-- Banker's algorithm implementation for safety verification
-- Cycle detection using DFS for wait-for graphs
-- Need matrix calculation (Max - Allocated)
-- Safe sequence generation when deadlock-free
 
-## 💼 Features Highlights
+1. Sign in, then open "Open Deadlock Detector" on the dashboard
+2. Set the number of processes and resources
+3. Enter the allocation matrix, the maximum demand matrix and the available resources
+4. Choose Banker's algorithm or the wait-for graph and click "Analyze for Deadlock"
+5. Read the result, the need matrix and the safe sequence
 
-✅ Full authentication framework integration  
-✅ Educational OS algorithms visualization  
-✅ Interactive user input and validation  
-✅ Real-time calculations and results  
-✅ Modern dark theme UI  
-✅ Responsive and scrollable layouts  
-✅ Comprehensive error handling  
-✅ Session-based security
+## Tests
 
-## 🎓 Learning Value
-
-This enhanced framework provides:
-- Practical CPU scheduling comparison
-- Deadlock detection and prevention understanding
-- Real-time algorithm visualization
-- Interactive learning environment
-- Professional UI/UX design patterns
-
----
-
-**Version**: 2.0 with OS Tools  
-**Last Updated**: 2026-04-13
+The scheduling, deadlock and authentication logic is covered by unit tests (`python -m unittest discover -s tests -t .`). The Tkinter screens are not covered by automated tests.
