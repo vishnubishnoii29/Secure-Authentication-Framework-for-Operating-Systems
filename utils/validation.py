@@ -13,7 +13,8 @@ class ValidationError(Exception):
 _MIN_USER_LEN = 3
 _MAX_USER_LEN = 32
 _MIN_PASS_LEN = 8
-_MAX_PASS_LEN = 128
+# bcrypt only accepts up to 72 bytes; longer passwords would crash hashing.
+_MAX_PASS_BYTES = 72
 
 _USERNAME_PATTERN = re.compile(r"^[a-zA-Z0-9._-]+$")
 
@@ -39,8 +40,10 @@ def validate_password_strength(password: str) -> str:
         raise ValidationError("Password cannot be empty.")
     if len(p) < _MIN_PASS_LEN:
         raise ValidationError(f"Password must be at least {_MIN_PASS_LEN} characters.")
-    if len(p) > _MAX_PASS_LEN:
-        raise ValidationError(f"Password must be at most {_MAX_PASS_LEN} characters.")
+    if len(p.encode("utf-8")) > _MAX_PASS_BYTES:
+        raise ValidationError(
+            f"Password must be at most {_MAX_PASS_BYTES} bytes (about {_MAX_PASS_BYTES} characters)."
+        )
     if not re.search(r"[a-z]", p):
         raise ValidationError("Password must include a lowercase letter.")
     if not re.search(r"[A-Z]", p):

@@ -8,6 +8,7 @@ from typing import Optional
 
 from database.repository import DuplicateUsernameError, UserRepository
 from logs.logger import log_event
+from auth.throttle import LoginThrottle
 from security.encryption import EncryptionService
 from security.hashing import hash_password, verify_password
 from security.otp import OTPChallenge, OTPService
@@ -34,9 +35,15 @@ class SessionState:
 
 
 class AuthService:
-    def __init__(self) -> None:
-        self._repo = UserRepository()
-        self._otp = OTPService(length=6, ttl_seconds=120.0)
+    def __init__(
+        self,
+        repo: Optional[UserRepository] = None,
+        throttle: Optional[LoginThrottle] = None,
+        otp: Optional[OTPService] = None,
+    ) -> None:
+        self._repo = repo or UserRepository()
+        self._throttle = throttle or LoginThrottle(max_failures=5, lock_seconds=60.0)
+        self._otp = otp or OTPService(length=6, ttl_seconds=120.0, max_attempts=3)
         self._encryption = EncryptionService()
         self._session: Optional[SessionState] = None
         self._otp_username: Optional[str] = None
@@ -77,9 +84,15 @@ class AuthService:
             log_event("login_failed", username=user, detail="empty_password")
             raise AuthError("Password cannot be empty.")
 
+        wait = self._throttle.seconds_locked(user)
+        if wait:
+            log_event("login_blocked", username=user, detail=f"locked_{wait}s_left")
+            raise AuthError(f"Too many failed attempts. Try again in {wait} seconds.")
+
         record = self._repo.get_by_username(user)
         if record is None or not verify_password(password, record.password_hash):
-            # Same message to avoid user enumeration
+            # Same message to avoid user enumeration; unknown names are counted too
+            self._throttle.record_failure(user)
             log_event("login_failed", username=user, detail="invalid_credentials")
             raise AuthError("Invalid username or password.")
 
@@ -97,10 +110,17 @@ class AuthService:
 
         ok = self._otp.verify(self._otp_username, otp_code)
         if not ok:
-            log_event("otp_failed", username=self._otp_username, detail="invalid_or_expired")
-            raise AuthError("Invalid or expired OTP. Try logging in again.")
+            username = self._otp_username
+            log_event("otp_failed", username=username, detail="invalid_or_expired")
+            if self._otp.has_pending:
+                raise AuthError("Incorrect code. Try again.")
+            # Challenge is gone (too many wrong codes, or it expired)
+            self._throttle.record_failure(username)
+            self._otp_username = None
+            raise AuthError("Code expired or too many wrong tries. Sign in again.")
 
         record = self._repo.get_by_username(self._otp_username)
+        self._throttle.record_success(self._otp_username)
         self._otp_username = None
         if record is None:
             raise AuthError("Account not found.")

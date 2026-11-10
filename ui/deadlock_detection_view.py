@@ -272,11 +272,13 @@ class DeadlockDetectionView(ttk.Frame):
             output += "=" * 70 + "\n\n"
 
             if result.is_deadlock:
-                output += f"⚠️  DEADLOCK DETECTED!\n"
-                output += f"Deadlocked Processes: {sorted(result.deadlocked_processes)}\n"
+                headline = "UNSAFE STATE" if method == "Bankers" else "DEADLOCK DETECTED"
+                output += f"⚠️  {headline}!\n"
+                output += f"Affected Processes: {[f'P{i}' for i in sorted(result.deadlocked_processes)]}\n"
                 output += f"\nReason: {result.reason}\n"
             else:
-                output += f"✓ NO DEADLOCK DETECTED\n\n"
+                headline = "SAFE STATE" if method == "Bankers" else "NO DEADLOCK DETECTED"
+                output += f"✓ {headline}\n\n"
                 output += f"Reason: {result.reason}\n"
                 if result.safe_sequence:
                     output += f"\nSafe Sequence: {[f'P{i}' for i in result.safe_sequence]}\n"
@@ -290,7 +292,10 @@ class DeadlockDetectionView(ttk.Frame):
             self.results_text.config(state=tk.DISABLED)
 
         except ValueError as e:
-            messagebox.showerror("Invalid Input", f"Please enter valid numbers: {str(e)}")
+            text = str(e)
+            if text.startswith("invalid literal"):
+                text = "Please enter whole numbers in every box."
+            messagebox.showerror("Invalid Input", text)
         except Exception as e:
             log_event("deadlock_analysis_error", detail=str(e))
             messagebox.showerror(
