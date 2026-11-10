@@ -6,3 +6,9 @@ client/build/
 .venv/
 __pycache__/
 *.pyc
+
+# Local runtime data: user accounts (password hashes) and the audit log
+data/
+
+# Editor settings
+.vscode/
