@@ -3,7 +3,7 @@
 import tempfile
 from pathlib import Path
 
-import logs.logger as _logger
+import audit.logger as _logger
 
 _tmp = Path(tempfile.mkdtemp(prefix="authlog_"))
 _logger._LOG_DIR = _tmp

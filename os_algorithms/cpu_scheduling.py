@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections import deque
 from dataclasses import dataclass
-from typing import List
+from typing import Callable, List
 
 
 @dataclass(slots=True)
@@ -82,10 +82,12 @@ class CPUScheduler:
         )
 
     @staticmethod
-    def sjf(processes: List[Process]) -> SchedulingResult:
-        """Shortest Job First scheduling (non-preemptive)."""
+    def _non_preemptive(
+        name: str, processes: List[Process], pick: Callable[[Process], int]
+    ) -> SchedulingResult:
+        """Run the arrived process with the smallest `pick` value to completion."""
         if not processes:
-            raise ValueError("At least one process is required for SJF scheduling.")
+            raise ValueError(f"At least one process is required for {name} scheduling.")
         remaining = sorted(processes, key=lambda p: p.arrival_time)
         gantt_chart: list[tuple[str, int, int]] = []
         waiting_times: dict[int, int] = {}
@@ -98,7 +100,7 @@ class CPUScheduler:
                 current_time = min(p.arrival_time for p in remaining)
                 continue
 
-            process = min(available, key=lambda p: p.burst_time)
+            process = min(available, key=pick)
             start_time = current_time
             end_time = start_time + process.burst_time
             gantt_chart.append((str(process), start_time, end_time))
@@ -107,12 +109,12 @@ class CPUScheduler:
             remaining.remove(process)
             current_time = end_time
 
-        return CPUScheduler._build_result(
-            "SJF (Shortest Job First)",
-            gantt_chart,
-            waiting_times,
-            turnaround_times,
-        )
+        return CPUScheduler._build_result(name, gantt_chart, waiting_times, turnaround_times)
+
+    @staticmethod
+    def sjf(processes: List[Process]) -> SchedulingResult:
+        """Shortest Job First scheduling (non-preemptive)."""
+        return CPUScheduler._non_preemptive("SJF (Shortest Job First)", processes, lambda p: p.burst_time)
 
     @staticmethod
     def round_robin(processes: List[Process], time_quantum: int) -> SchedulingResult:
@@ -169,32 +171,4 @@ class CPUScheduler:
     @staticmethod
     def priority_scheduling(processes: List[Process]) -> SchedulingResult:
         """Priority Scheduling (non-preemptive, lower priority number = higher priority)."""
-        if not processes:
-            raise ValueError("At least one process is required for Priority scheduling.")
-        remaining = sorted(processes, key=lambda p: p.arrival_time)
-        gantt_chart: list[tuple[str, int, int]] = []
-        waiting_times: dict[int, int] = {}
-        turnaround_times: dict[int, int] = {}
-        current_time = 0
-
-        while remaining:
-            available = [p for p in remaining if p.arrival_time <= current_time]
-            if not available:
-                current_time = min(p.arrival_time for p in remaining)
-                continue
-
-            process = min(available, key=lambda p: p.priority)
-            start_time = current_time
-            end_time = start_time + process.burst_time
-            gantt_chart.append((str(process), start_time, end_time))
-            waiting_times[process.pid] = start_time - process.arrival_time
-            turnaround_times[process.pid] = end_time - process.arrival_time
-            remaining.remove(process)
-            current_time = end_time
-
-        return CPUScheduler._build_result(
-            "Priority Scheduling",
-            gantt_chart,
-            waiting_times,
-            turnaround_times,
-        )
+        return CPUScheduler._non_preemptive("Priority Scheduling", processes, lambda p: p.priority)

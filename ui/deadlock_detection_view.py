@@ -6,9 +6,12 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 from typing import Callable
 
-from logs.logger import log_event
+from audit.logger import log_event
 from os_algorithms.deadlock_detection import DeadlockDetector, ResourceAllocationState
 from ui.styles import Theme
+
+
+MAX_SIZE = 10
 
 
 class DeadlockDetectionView(ttk.Frame):
@@ -34,11 +37,11 @@ class DeadlockDetectionView(ttk.Frame):
         # Top Header with Back Button
         top_header = ttk.Frame(self, style="App.TFrame")
         top_header.pack(fill=tk.X, padx=20, pady=(12, 0))
-        
+
         ttk.Button(top_header, text="← Back to Dashboard", style="Ghost.TButton", command=self._on_back).pack(
             anchor=tk.W
         )
-        
+
         # Header
         header = ttk.Frame(self, style="App.TFrame")
         header.pack(fill=tk.X, padx=20, pady=(12, 16))
@@ -68,12 +71,12 @@ class DeadlockDetectionView(ttk.Frame):
         setup_frame.pack(fill=tk.X, pady=8)
 
         ttk.Label(setup_frame, text="Processes:", style="Card.TLabel").pack(side=tk.LEFT, padx=4)
-        self.processes_spin = ttk.Spinbox(setup_frame, from_=1, to=10, width=5)
+        self.processes_spin = ttk.Spinbox(setup_frame, from_=1, to=MAX_SIZE, width=5)
         self.processes_spin.set(3)
         self.processes_spin.pack(side=tk.LEFT, padx=4)
 
         ttk.Label(setup_frame, text="Resources:", style="Card.TLabel").pack(side=tk.LEFT, padx=4)
-        self.resources_spin = ttk.Spinbox(setup_frame, from_=1, to=10, width=5)
+        self.resources_spin = ttk.Spinbox(setup_frame, from_=1, to=MAX_SIZE, width=5)
         self.resources_spin.set(3)
         self.resources_spin.pack(side=tk.LEFT, padx=4)
 
@@ -174,13 +177,25 @@ class DeadlockDetectionView(ttk.Frame):
         )
         self.results_text.pack(fill=tk.BOTH, expand=True)
 
-
+    @staticmethod
+    def _to_int(text: str) -> int:
+        try:
+            return int(text)
+        except ValueError:
+            raise ValueError("Please enter whole numbers in every box.") from None
 
     def _setup_system(self) -> None:
         """Setup the system with specified processes and resources."""
         try:
-            self._processes_count = int(self.processes_spin.get())
-            self._resources_count = int(self.resources_spin.get())
+            processes = self._to_int(self.processes_spin.get())
+            resources = self._to_int(self.resources_spin.get())
+            if not (1 <= processes <= MAX_SIZE and 1 <= resources <= MAX_SIZE):
+                messagebox.showerror(
+                    "Invalid Input", f"Processes and resources must be between 1 and {MAX_SIZE}."
+                )
+                return
+            self._processes_count = processes
+            self._resources_count = resources
 
             # Clear existing widgets
             for widget in self.allocated_frame.winfo_children():
@@ -217,8 +232,8 @@ class DeadlockDetectionView(ttk.Frame):
             )
 
             messagebox.showinfo("System Setup", f"Configured for {self._processes_count} processes and {self._resources_count} resources.\nFill in the matrices with resource values.")
-        except ValueError:
-            messagebox.showerror("Invalid Input", "Please enter valid numbers.")
+        except ValueError as e:
+            messagebox.showerror("Invalid Input", str(e))
 
     def _analyze(self) -> None:
         """Analyze the system for deadlock."""
@@ -228,17 +243,13 @@ class DeadlockDetectionView(ttk.Frame):
 
         try:
             # Read allocated matrix
-            allocated = []
-            for row in self.allocated_entries:
-                allocated.append([int(entry.get()) for entry in row])
+            allocated = [[self._to_int(e.get()) for e in row] for row in self.allocated_entries]
 
             # Read max demand matrix
-            max_demand = []
-            for row in self.max_entries:
-                max_demand.append([int(entry.get()) for entry in row])
+            max_demand = [[self._to_int(e.get()) for e in row] for row in self.max_entries]
 
             # Read available resources
-            available = [int(x) for x in self.available_entry.get().strip().split()]
+            available = [self._to_int(x) for x in self.available_entry.get().split()]
 
             if len(available) != self._resources_count:
                 messagebox.showerror(
@@ -292,10 +303,7 @@ class DeadlockDetectionView(ttk.Frame):
             self.results_text.config(state=tk.DISABLED)
 
         except ValueError as e:
-            text = str(e)
-            if text.startswith("invalid literal"):
-                text = "Please enter whole numbers in every box."
-            messagebox.showerror("Invalid Input", text)
+            messagebox.showerror("Invalid Input", str(e))
         except Exception as e:
             log_event("deadlock_analysis_error", detail=str(e))
             messagebox.showerror(

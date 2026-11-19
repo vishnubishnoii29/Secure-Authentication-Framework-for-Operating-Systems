@@ -7,14 +7,14 @@ from tkinter import messagebox, ttk
 
 from auth.service import AuthError, AuthService
 from database.connection import init_database
-from logs.logger import get_logger, log_event
+from audit.logger import get_logger, log_event
 from ui.cpu_scheduling_view import CPUSchedulingView
 from ui.dashboard_view import DashboardView
 from ui.deadlock_detection_view import DeadlockDetectionView
 from ui.login_view import LoginView
 from ui.otp_view import OTPView
 from ui.register_view import RegisterView
-from ui.styles import Theme, apply_root_style, configure_ttk_styles
+from ui.styles import apply_root_style, configure_ttk_styles
 
 
 class AuthApplication:

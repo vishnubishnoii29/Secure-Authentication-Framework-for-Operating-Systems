@@ -13,20 +13,15 @@ class Theme:
     BG_HOVER = "#232f42"
     FG = "#e7ecf3"
     FG_MUTED = "#8b9bb4"
-    
+
     # Accent colors
     ACCENT = "#3d9cf0"
     ACCENT_HOVER = "#5cb0ff"
-    ACCENT_LIGHT = "#5cb0ff"
-    
+
     # Status colors
     SUCCESS = "#3dd68c"
-    SUCCESS_HOVER = "#4fe99d"
     ERROR = "#f07178"
-    ERROR_HOVER = "#f89a9e"
-    WARNING = "#ffb454"
-    WARNING_HOVER = "#ffc670"
-    
+
     # Utility colors
     BORDER = "#2d3a4f"
     FIELD_BG = "#131b26"
@@ -58,7 +53,7 @@ def configure_ttk_styles() -> ttk.Style:
         background=Theme.BG_ELEVATED,
         relief="flat",
     )
-    
+
     # Label styles
     style.configure(
         "Title.TLabel",
@@ -101,7 +96,7 @@ def configure_ttk_styles() -> ttk.Style:
         foreground=Theme.ACCENT,
         font="{Segoe UI} 10 underline",
     )
-    
+
     # Entry styles
     style.configure(
         "TEntry",
@@ -120,7 +115,7 @@ def configure_ttk_styles() -> ttk.Style:
         ],
         foreground=[("disabled", Theme.FG_MUTED)],
     )
-    
+
     # Primary button (Accent)
     style.configure(
         "Accent.TButton",
@@ -141,7 +136,7 @@ def configure_ttk_styles() -> ttk.Style:
         ],
         foreground=[("disabled", "#8899aa")],
     )
-    
+
     # Secondary button (Ghost)
     style.configure(
         "Ghost.TButton",
@@ -160,28 +155,7 @@ def configure_ttk_styles() -> ttk.Style:
         ],
         foreground=[("disabled", Theme.FG_MUTED)],
     )
-    
-    # Success button
-    style.configure(
-        "Success.TButton",
-        background=Theme.SUCCESS,
-        foreground="#ffffff",
-        font="{Segoe UI} 10 bold",
-        padding=(16, 10),
-        borderwidth=0,
-        focuscolor=Theme.SUCCESS,
-        relief="flat",
-    )
-    style.map(
-        "Success.TButton",
-        background=[
-            ("active", Theme.SUCCESS_HOVER),
-            ("pressed", Theme.SUCCESS_HOVER),
-            ("disabled", "#2d5c5c"),
-        ],
-        foreground=[("disabled", "#8899aa")],
-    )
-    
+
     # Radio and Check buttons with better styling
     style.map(
         "TRadiobutton",
@@ -193,7 +167,7 @@ def configure_ttk_styles() -> ttk.Style:
         background=[("active", Theme.BG_ELEVATED)],
         foreground=[("active", Theme.FG)],
     )
-    
+
     # Spinbox styling
     style.configure(
         "TSpinbox",
@@ -204,7 +178,7 @@ def configure_ttk_styles() -> ttk.Style:
         relief="flat",
         borderwidth=1,
     )
-    
+
     # Scrollbar styling
     style.configure(
         "Vertical.TScrollbar",
@@ -219,6 +193,6 @@ def configure_ttk_styles() -> ttk.Style:
         "Vertical.TScrollbar",
         background=[("active", Theme.ACCENT)],
     )
-    
+
     return style
 

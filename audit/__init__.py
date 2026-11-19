@@ -1,5 +1,5 @@
 """Structured application logging."""
 
-from logs.logger import get_logger, log_event
+from audit.logger import get_logger, log_event
 
 __all__ = ["get_logger", "log_event"]

@@ -90,56 +90,35 @@ class DashboardView(ttk.Frame):
         ).pack(anchor=tk.W)
 
         # OS Tools Section
-        tools_label = ttk.Label(
-            outer, text="Operating System Tools", style="Title.TLabel"
+        ttk.Label(outer, text="Operating System Tools", style="Title.TLabel").pack(
+            anchor=tk.W, pady=(20, 12)
         )
-        tools_label.pack(anchor=tk.W, pady=(20, 12))
-
-        # CPU Scheduling Card
-        cpu_card = ttk.Frame(outer, style="Card.TFrame", padding=20)
-        cpu_card.pack(fill=tk.X, pady=(0, 12))
-
-        ttk.Label(cpu_card, text="CPU Scheduling Simulator", style="CardTitle.TLabel").pack(
-            anchor=tk.W
+        self._tool_card(
+            outer,
+            "CPU Scheduling Simulator",
+            "Analyze different CPU scheduling algorithms (FCFS, SJF, Round Robin, Priority)",
+            "→ Open CPU Scheduler",
+            self._on_cpu_scheduling,
         )
-        ttk.Label(
-            cpu_card,
-            text="Analyze different CPU scheduling algorithms (FCFS, SJF, Round Robin, Priority)",
-            style="Muted.TLabel",
-            wraplength=400,
-        ).pack(anchor=tk.W, pady=(4, 12))
+        self._tool_card(
+            outer,
+            "Deadlock Detection Simulator",
+            "Detect and analyze deadlock conditions using Banker's Algorithm and Wait-for Graph",
+            "→ Open Deadlock Detector",
+            self._on_deadlock_detection,
+        )
 
-        cpu_btn_frame = ttk.Frame(cpu_card, style="Card.TFrame")
-        cpu_btn_frame.pack(fill=tk.X)
-        ttk.Button(
-            cpu_btn_frame,
-            text="→ Open CPU Scheduler",
-            style="Accent.TButton",
-            command=self._on_cpu_scheduling,
-        ).pack(anchor=tk.W)
-
-        # Deadlock Detection Card
-        deadlock_card = ttk.Frame(outer, style="Card.TFrame", padding=20)
-        deadlock_card.pack(fill=tk.X, pady=(0, 12))
-
-        ttk.Label(
-            deadlock_card, text="Deadlock Detection Simulator", style="CardTitle.TLabel"
-        ).pack(anchor=tk.W)
-        ttk.Label(
-            deadlock_card,
-            text="Detect and analyze deadlock conditions using Banker's Algorithm and Wait-for Graph",
-            style="Muted.TLabel",
-            wraplength=400,
-        ).pack(anchor=tk.W, pady=(4, 12))
-
-        deadlock_btn_frame = ttk.Frame(deadlock_card, style="Card.TFrame")
-        deadlock_btn_frame.pack(fill=tk.X)
-        ttk.Button(
-            deadlock_btn_frame,
-            text="→ Open Deadlock Detector",
-            style="Accent.TButton",
-            command=self._on_deadlock_detection,
-        ).pack(anchor=tk.W)
+    @staticmethod
+    def _tool_card(
+        parent: tk.Misc, title: str, description: str, button_text: str, command: Callable[[], None]
+    ) -> None:
+        card = ttk.Frame(parent, style="Card.TFrame", padding=20)
+        card.pack(fill=tk.X, pady=(0, 12))
+        ttk.Label(card, text=title, style="CardTitle.TLabel").pack(anchor=tk.W)
+        ttk.Label(card, text=description, style="Muted.TLabel", wraplength=400).pack(
+            anchor=tk.W, pady=(4, 12)
+        )
+        ttk.Button(card, text=button_text, style="Accent.TButton", command=command).pack(anchor=tk.W)
 
     def set_session(self, session: SessionState) -> None:
         self._welcome.set(f"Welcome, {session.username}.")

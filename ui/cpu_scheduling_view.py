@@ -6,7 +6,7 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 from typing import Callable
 
-from logs.logger import log_event
+from audit.logger import log_event
 from os_algorithms.cpu_scheduling import CPUScheduler, Process
 from ui.styles import Theme
 
@@ -30,11 +30,11 @@ class CPUSchedulingView(ttk.Frame):
         # Top Header with Back Button
         top_header = ttk.Frame(self, style="App.TFrame")
         top_header.pack(fill=tk.X, padx=20, pady=(12, 0))
-        
+
         ttk.Button(top_header, text="← Back to Dashboard", style="Ghost.TButton", command=self._on_back).pack(
             anchor=tk.W
         )
-        
+
         # Header
         header = ttk.Frame(self, style="App.TFrame")
         header.pack(fill=tk.X, padx=20, pady=(12, 16))
@@ -174,8 +174,6 @@ class CPUSchedulingView(ttk.Frame):
         )
         self.results_text.pack(fill=tk.BOTH, expand=True)
 
-
-
     def _add_process(self) -> None:
         """Add a new process."""
         try:
@@ -272,11 +270,11 @@ class CPUSchedulingView(ttk.Frame):
             for proc_name, start, end in result.gantt_chart:
                 output += f"  {proc_name}: {start} → {end} (Duration: {end - start})\n"
 
-            output += f"\nWaiting Times:\n"
+            output += "\nWaiting Times:\n"
             for pid, wt in result.waiting_times.items():
                 output += f"  P{pid}: {wt}\n"
 
-            output += f"\nTurnaround Times:\n"
+            output += "\nTurnaround Times:\n"
             for pid, tt in result.turnaround_times.items():
                 output += f"  P{pid}: {tt}\n"
 

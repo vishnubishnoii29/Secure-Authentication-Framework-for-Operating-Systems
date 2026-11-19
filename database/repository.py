@@ -46,19 +46,7 @@ class UserRepository:
         row = cur.fetchone()
         if row is None:
             return None
-        return UserRecord(
-            id=row["id"],
-            username=row["username"],
-            password_hash=row["password_hash"],
-            created_at=row["created_at"],
-        )
-
-    def username_exists(self, username: str) -> bool:
-        cur = self._conn.execute(
-            "SELECT 1 FROM users WHERE username = ? COLLATE NOCASE LIMIT 1",
-            (username.strip(),),
-        )
-        return cur.fetchone() is not None
+        return UserRecord(*row)
 
 
 class DuplicateUsernameError(Exception):

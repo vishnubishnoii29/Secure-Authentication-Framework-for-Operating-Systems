@@ -20,14 +20,12 @@ main.py                 entry point
 auth/                   registration, login, OTP hand-off, session, lockout (throttle.py)
 security/               bcrypt hashing, OTP, Fernet encryption
 database/               SQLite connection, schema, user repository
-logs/                   file and console logging
+audit/                  file and console audit logging
 os_algorithms/          cpu_scheduling.py, deadlock_detection.py
 ui/                     Tkinter screens
 utils/                  username and password rules
 tests/                  unit tests (standard library only)
-client/                 unfinished React login mock-up, not connected to the app
 data/                   created at run time: auth.db and logs/auth_events.log (not in git)
-FEATURES.md             notes on the OS tools
 ```
 
 ## Setup and run
@@ -62,6 +60,11 @@ The tests use an in-memory database and a temporary log file, so they never touc
 - The OTP is shown on screen on purpose; a real system would send it to a phone or email.
 - The encrypted session token uses a key that lives only in memory. It demonstrates encryption but does not add real session security.
 - `data/` holds account hashes and the audit log and is ignored by git. Do not commit it.
+
+## The CPU scheduling simulator in short
+
+- **Algorithms:** FCFS, SJF and Priority (lower number = higher priority) are non-preemptive; Round Robin is preemptive with a configurable time quantum.
+- **Use it:** add processes (arrival, burst, priority), pick an algorithm, then "Calculate & View Results" for the Gantt chart, waiting and turnaround times, and their averages.
 
 ## The deadlock simulator in short
 

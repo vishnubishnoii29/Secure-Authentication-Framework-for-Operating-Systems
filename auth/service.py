@@ -7,12 +7,23 @@ from dataclasses import dataclass
 from typing import Optional
 
 from database.repository import DuplicateUsernameError, UserRepository
-from logs.logger import log_event
+from audit.logger import log_event
 from auth.throttle import LoginThrottle
 from security.encryption import EncryptionService
 from security.hashing import hash_password, verify_password
 from security.otp import OTPChallenge, OTPService
 from utils.validation import ValidationError, validate_credentials, validate_username
+
+
+_dummy_hash: Optional[bytes] = None
+
+
+def _fake_verify(password: str) -> None:
+    """Spend the same bcrypt time as a real check so unknown users are not faster."""
+    global _dummy_hash
+    if _dummy_hash is None:
+        _dummy_hash = hash_password("dummy-Password-1!")
+    verify_password(password, _dummy_hash)
 
 
 class AuthError(Exception):
@@ -90,6 +101,8 @@ class AuthService:
             raise AuthError(f"Too many failed attempts. Try again in {wait} seconds.")
 
         record = self._repo.get_by_username(user)
+        if record is None:
+            _fake_verify(password)
         if record is None or not verify_password(password, record.password_hash):
             # Same message to avoid user enumeration; unknown names are counted too
             self._throttle.record_failure(user)
